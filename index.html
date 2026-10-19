@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="hu" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Bemutató - A világ vezető fejlesztői platformja</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        gh: {
+                            bg: '#0d1117',
+                            card: '#161b22',
+                            border: '#30363d',
+                            muted: '#8b949e',
+                            text: '#c9d1d9',
+                            white: '#f0f6fc',
+                            green: '#238636',
+                            greenHover: '#2ea043',
+                            blue: '#58a6ff',
+                            purple: '#a371f7',
+                            pink: '#d2a8ff',
+                            orange: '#f0883e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Extra custom scrollbar & sleek transitions */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8b949e;
+        }
+        .glow-purple {
+            box-shadow: 0 0 50px -10px rgba(163, 113, 247, 0.25);
+        }
+        .glow-blue {
+            box-shadow: 0 0 50px -10px rgba(88, 166, 255, 0.25);
+        }
+        .glow-green {
+            box-shadow: 0 0 50px -10px rgba(35, 134, 54, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gh-bg text-gh-text font-sans antialiased selection:bg-gh-purple selection:text-white min-h-screen flex flex-col">
+
+    <!-- Toast Notification for Copy / Actions -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-gh-card border border-gh-border text-gh-white px-4 py-3 rounded-xl shadow-2xl transition-all duration-300 opacity-0 translate-y-5 pointer-events-none flex items-center space-x-3">
+        <svg class="w-5 h-5 text-gh-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span id="toast-message">Sikeresen másolva a vágólapra!</span>
+    </div>
+
+    <!-- 1. Header / Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-gh-bg/90 backdrop-blur-md border-b border-gh-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand / Logo -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <svg class="w-9 h-9 text-gh-white fill-current transform group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                    </svg>
+                    <span class="text-xl font-bold text-gh-white tracking-tight">GitHub <span class="text-gh-purple">Bemutató</span></span>
+                </a>
+
+                <!-- Desktop Nav Navigation -->
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#mi-az-a-github" class="hover:text-gh-blue transition-colors">Mi az a GitHub?</a>
+                    <a href="#funkciok" class="hover:text-gh-blue transition-colors">Fő funkciók</a>
+                    <a href="#workflow" class="hover:text-gh-blue transition-colors">Git Munkafolyamat</a>
+                    <a href="#parancsok" class="hover:text-gh-blue transition-colors">Parancsok</a>
+                    <a href="#kinek-ajanlott" class="hover:text-gh-blue transition-colors">Kinek ajánlott?</a>
+                    <a href="#interaktiv" class="px-3.5 py-1.5 rounded-lg bg-gh-card border border-gh-border text-gh-purple hover:border-gh-purple transition-all shadow-sm">Kvíz & Szimulátor</a>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gh-muted hover:text-gh-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-gh-border bg-gh-card/95 backdrop-blur-lg px-4 pt-2 pb-4 space-y-2">
+            <a href="#mi-az-a-github" class="block py-2 text-gh-text hover:text-gh-blue">Mi az a GitHub?</a>
+            <a href="#funkciok" class="block py-2 text-gh-text hover:text-gh-blue">Fő funkciók</a>
+            <a href="#workflow" class="block py-2 text-gh-text hover:text-gh-blue">Git Munkafolyamat</a>
+            <a href="#parancsok" class="block py-2 text-gh-text hover:text-gh-blue">Parancsok</a>
+            <a href="#kinek-ajanlott" class="block py-2 text-gh-text hover:text-gh-blue">Kinek ajánlott?</a>
+            <a href="#interaktiv" class="block py-2 text-gh-purple font-semibold">Kvíz & Szimulátor</a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- 2. Hero Section -->
+        <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden border-b border-gh-border">
+            <!-- Background Gradient Effects -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-gh-purple/20 via-gh-blue/20 to-transparent blur-[120px] pointer-events-none rounded-full"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Hero Content -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gh-card border border-gh-border text-xs text-gh-purple font-medium">
+                            <span class="flex h-2 w-2 rounded-full bg-gh-purple animate-ping"></span>
+                            <span>A világ legnagyobb fejlesztői közössége</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gh-white tracking-tight leading-tight">
+                            A világ vezető <br class="hidden sm:inline"/>
+                            <span class="bg-gradient-to-r from-gh-blue via-gh-purple to-gh-pink bg-clip-text text-transparent">fejlesztői platformja</span>
+                        </h1>
+                        <p class="text-lg text-gh-muted max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                            A GitHub a hely, ahol több mint 100 millió fejlesztő tárolja, kezeli és osztja meg a kódját. Verziókövetés, AI-asszisztens, automatizáció és közösségi együttműködés egyetlen modern ökoszisztémában.
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                            <a href="https://github.com/signup" target="_blank" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gh-green hover:bg-gh-greenHover text-white font-semibold transition-all shadow-lg hover:shadow-gh-green/20 flex items-center justify-center space-x-2">
+                                <span>Regisztráció GitHubra</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                            <a href="#interaktiv" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gh-card hover:bg-gh-border border border-gh-border text-gh-white font-semibold transition-all flex items-center justify-center space-x-2">
+                                <svg class="w-5 h-5 text-gh-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span>Próbáld ki a szimulátort</span>
+                            </a>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="pt-8 border-t border-gh-border/60 grid grid-cols-3 gap-4 text-center lg:text-left">
+                            <div>
+                                <p class="text-2xl sm:text-3xl font-bold text-gh-white">100M+</p>
+                                <p class="text-xs text-gh-muted">Fejlesztő</p>
+                            </div>
+                            <div>
+                                <p class="text-2xl sm:text-3xl font-bold text-gh-white">400M+</p>
+                                <p class="text-xs text-gh-muted">Repository</p>
+                            </div>
+                            <div>
+                                <p class="text-2xl sm:text-3xl font-bold text-gh-white">90%</p>
+                                <p class="text-xs text-gh-muted">Fortune 100 cég</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Code/Terminal Window -->
+                    <div class="lg:col-span-5">
+                        <div class="bg-gh-card border border-gh-border rounded-2xl shadow-2xl overflow-hidden glow-purple">
+                            <!-- Window Header -->
+                            <div class="bg-[#161b22] px-4 py-3 border-b border-gh-border flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                                </div>
+                                <span class="text-xs font-mono text-gh-muted">bash - git workflow</span>
+                                <div class="w-12"></div>
+                            </div>
+                            <!-- Terminal Content -->
+                            <div class="p-5 font-mono text-xs sm:text-sm space-y-3 leading-relaxed text-gh-text bg-[#0d1117]/80">
+                                <div class="flex items-center space-x-2 text-gh-muted">
+                                    <span class="text-gh-purple">➜</span>
+                                    <span class="text-gh-blue">my-awesome-project</span>
+                                    <span class="text-gh-green">(main)</span>
+                                </div>
+                                <div>
+                                    <span class="text-gh-pink">$</span> <span class="text-gh-white">git status</span>
+                                </div>
+                                <div class="text-gh-muted pl-4">
+                                    On branch main<br>
+                                    Changes not staged for commit:<br>
+                                    &nbsp;&nbsp;<span class="text-red-400">modified: app.js</span>
+                                </div>
+                                <div>
+                                    <span class="text-gh-pink">$</span> <span class="text-gh-white">git commit -m "feat: új AI funkció hozzáadása"</span>
+                                </div>
+                                <div class="text-gh-muted pl-4 border-l-2 border-gh-purple/50">
+                                    [main 8a3f2b1] feat: új AI funkció hozzáadása<br>
+                                    &nbsp;1 file changed, 24 insertions(+)
+                                </div>
+                                <div>
+                                    <span class="text-gh-pink">$</span> <span class="text-gh-white">git push origin main</span>
+                                </div>
+                                <div class="text-gh-green pl-4">
+                                    Enumerating objects: 5, done.<br>
+                                    Writing objects: 100% (3/3), 420 bytes | 420.00 KiB/s<br>
+                                    To github.com:user/my-awesome-project.git<br>
+                                    &nbsp;&nbsp;<span class="text-gh-blue">8a3f2b1..9c4d1e2 main -> main</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Mi az a GitHub? (What is GitHub?) -->
+        <section id="mi-az-a-github" class="py-20 border-b border-gh-border relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-semibold text-gh-blue uppercase tracking-widest mb-2">Alapfogalmak</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-gh-white">Mi az a GitHub és miben más, mint a Git?</h3>
+                    <p class="mt-4 text-gh-muted text-base">Sokan összekeverik a Git-et és a GitHubot. Bár szorosan összefüggenek, teljesen eltérő feladatot látnak el a szoftverfejlesztésben.</p>
+                </div>
+
+                <!-- Git vs GitHub Comparison Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <!-- Git Card -->
+                    <div class="bg-gh-card border border-gh-border p-8 rounded-2xl hover:border-gh-orange/50 transition-all">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="p-3 bg-gh-orange/10 border border-gh-orange/20 rounded-xl text-gh-orange">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M2.6 10.59L11.5 1.7c.77-.77 2.03-.77 2.8 0l8 8c.77.77.77 2.03 0 2.8l-8.9 8.9c-.77.77-2.03.77-2.8 0l-8-8c-.77-.78-.77-2.04 0-2.81z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-bold text-gh-white">Git</h4>
+                                <span class="text-xs text-gh-orange font-mono">Helyi Verziókezelő Szoftver</span>
+                            </div>
+                        </div>
+                        <ul class="space-y-3 text-gh-muted text-sm">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-gh-orange mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span>A saját számítógépeden futó parancssori eszköz.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-gh-orange mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span>Nyomon követi a fájlok változásait és a kód históriáját.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-gh-orange mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span>Működik internetkapcsolat nélkül is offline módban.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- GitHub Card -->
+                    <div class="bg-gh-card border border-gh-border p-8 rounded-2xl hover:border-gh-purple/50 transition-all glow-purple">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="p-3 bg-gh-purple/10 border border-gh-purple/20 rounded-xl text-gh-purple">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-bold text-gh-white">GitHub</h4>
+                                <span class="text-xs text-gh-purple font-mono">M felhőalapú Tároló & Platform</span>
+                            </div>
+                        </div>
+                        <ul class="space-y-3 text-gh-muted text-sm">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-gh-purple mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span>Felhőben tárolja a Git repository-kat (projekt raktárakat).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-gh-purple mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span>Közösségi funkciókat, code review-t, és projektmenedzsmentet nyújt.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-gh-purple mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span>Beépített AI (Copilot), automatizáció (Actions) és webes felület.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3 Pillar Features -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gh-card/50 border border-gh-border p-6 rounded-xl">
+                        <div class="w-10 h-10 rounded-lg bg-gh-blue/10 border border-gh-blue/20 text-gh-blue flex items-center justify-center mb-4">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 001-9.9V10a3 3 0 00-3-3H7a3 3 0 00-3 3v5z"/></svg>
+                        </div>
+                        <h5 class="text-lg font-bold text-gh-white mb-2">Felhőtárhely (Cloud Hosting)</h5>
+                        <p class="text-sm text-gh-muted">A kódod biztonságban van a felhőben. Bárhonnan elérheted, nem veszik el, ha meghibásodik a számítógéped.</p>
+                    </div>
+                    <div class="bg-gh-card/50 border border-gh-border p-6 rounded-xl">
+                        <div class="w-10 h-10 rounded-lg bg-gh-green/10 border border-gh-green/20 text-gh-green flex items-center justify-center mb-4">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        </div>
+                        <h5 class="text-lg font-bold text-gh-white mb-2">Nyílt Forráskód & Közösség</h5>
+                        <p class="text-sm text-gh-muted">Milliónyi nyílt forráskódú projekthez (Open Source) csatlakozhatsz, tanulhatsz mások kódjából vagy hozzájárulhatsz.</p>
+                    </div>
+                    <div class="bg-gh-card/50 border border-gh-border p-6 rounded-xl">
+                        <div class="w-10 h-10 rounded-lg bg-gh-purple/10 border border-gh-purple/20 text-gh-purple flex items-center justify-center mb-4">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                        <h5 class="text-lg font-bold text-gh-white mb-2">Csapatmunka (Collaboration)</h5>
+                        <p class="text-sm text-gh-muted">Több fejlesztő dolgozhat ugyanazon a projekten egyidejűleg anélkül, hogy felülírnák egymás munkáját.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Fő funkciók (Key Features Tabs) -->
+        <section id="funkciok" class="py-20 border-b border-gh-border bg-[#0d1117]/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-semibold text-gh-green uppercase tracking-widest mb-2">Ökoszisztéma</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-gh-white">A GitHub Fő Funkciói</h3>
+                    <p class="mt-4 text-gh-muted text-base">Minden eszköz egy helyen, amire egy modern szoftverfejlesztő csapatnak szüksége lehet.</p>
+                </div>
+
+                <!-- Tab Navigation Buttons -->
+                <div class="flex flex-wrap justify-center gap-2 mb-10">
+                    <button onclick="switchTab('repo')" id="tab-repo" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium border border-gh-purple bg-gh-purple/10 text-gh-purple transition-all">
+                        📦 Repositories
+                    </button>
+                    <button onclick="switchTab('pr')" id="tab-pr" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium border border-gh-border bg-gh-card text-gh-muted hover:text-gh-white transition-all">
+                        🔀 Pull Requests
+                    </button>
+                    <button onclick="switchTab('issues')" id="tab-issues" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium border border-gh-border bg-gh-card text-gh-muted hover:text-gh-white transition-all">
+                        🎯 Issues & Projects
+                    </button>
+                    <button onclick="switchTab('actions')" id="tab-actions" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium border border-gh-border bg-gh-card text-gh-muted hover:text-gh-white transition-all">
+                        ⚡ GitHub Actions
+                    </button>
+                    <button onclick="switchTab('copilot')" id="tab-copilot" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium border border-gh-border bg-gh-card text-gh-muted hover:text-gh-white transition-all">
+                        🤖 GitHub Copilot
+                    </button>
+                </div>
+
+                <!-- Tab Content Containers -->
+                <div class="bg-gh-card border border-gh-border rounded-2xl p-6 sm:p-10 shadow-xl min-h-[320px] flex items-center">
+                    
+                    <!-- Tab 1: Repositories -->
+                    <div id="content-repo" class="tab-content w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4">
+                            <span class="px-3 py-1 rounded-md text-xs font-mono bg-gh-blue/10 text-gh-blue border border-gh-blue/20">Projekt Tárolók</span>
+                            <h4 class="text-2xl font-bold text-gh-white">Repositories (Raktárak)</h4>
+                            <p class="text-gh-muted leading-relaxed text-sm">
+                                A repository (röviden „repo”) a projekted központi mappája. Tartalmazza az összes fájlt, a fájlok módosítási előzményeit (commit history), a README leírást és a licencet.
+                            </p>
+                            <ul class="space-y-2 text-sm text-gh-text">
+                                <li class="flex items-center space-x-2">
+                                    <span class="text-gh-green">✓</span> <span>Nyilvános (Public) vagy Privát (Private) láthatóság</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="text-gh-green">✓</span> <span>Beépített Wikik és dokumentáció</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="text-gh-green">✓</span> <span>Branch védelem és jogosultságkezelés</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gh-bg p-6 rounded-xl border border-gh-border font-mono text-xs text-gh-text space-y-3">
+                            <div class="flex items-center justify-between pb-3 border-b border-gh-border">
+                                <span class="text-gh-blue font-bold">awesome-project / README.md</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] bg-gh-green/20 text-gh-green">Public</span>
+                            </div>
+                            <p class="text-gh-muted"># Awesome Project 🚀</p>
+                            <p>Ez egy példa projekt leírása. A GitHub automatikusan szépen formázza a Markdown fájlokat.</p>
+                            <div class="pt-3 flex items-center space-x-4 text-gh-muted">
+                                <span>⭐ 1.2k stars</span>
+                                <span>🍴 340 forks</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Pull Requests -->
+                    <div id="content-pr" class="tab-content hidden w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4">
+                            <span class="px-3 py-1 rounded-md text-xs font-mono bg-gh-purple/10 text-gh-purple border border-gh-purple/20">Kódellenőrzés & Egyesítés</span>
+                            <h4 class="text-2xl font-bold text-gh-white">Pull Requests (PR)</h4>
+                            <p class="text-gh-muted leading-relaxed text-sm">
+                                A Pull Request a GitHub együttműködés lelke. Lehetővé teszi, hogy javaslatot tegyél a kód módosítására, amit a csapattársaid átnézhetnek (Code Review), megjegyzéseket fűzhetnek hozzá, majd egyesíthetik (Merge) a fő kóddal.
+                            </p>
+                            <ul class="space-y-2 text-sm text-gh-text">
+                                <li class="flex items-center space-x-2">
+                                    <span class="text-gh-purple">✓</span> <span>Vizuális diff (változások sorról sorra)</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="text-gh-purple">✓</span> <span>Kötelező jóváhagyások (Approvals)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gh-bg p-6 rounded-xl border border-gh-border font-mono text-xs space-y-2">
+                            <div class="text-gh-green font-bold">PR #42: + Add user authentication</div>
+                            <div class="bg-green-950/40 text-green-400 p-2 rounded border border-green-800/40">
+                                + const user = await auth.login(credentials);
+                            </div>
+                            <div class="bg-red-950/40 text-red-400 p-2 rounded border border-red-800/40">
+                                - const user = oldAuthSystem.login();
+                            </div>
+                            <div class="pt-2 text-gh-muted flex justify-between items-center">
+                                <span>Reviewer: <span class="text-gh-blue">@senior_dev</span></span>
+                                <span class="px-2 py-1 bg-gh-green text-white rounded text-[10px]">Approved</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Issues -->
+                    <div id="content-issues" class="tab-content hidden w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4">
+                            <span class="px-3 py-1 rounded-md text-xs font-mono bg-gh-orange/10 text-gh-orange border border-gh-orange/20">Feladatkezelés</span>
+                            <h4 class="text-2xl font-bold text-gh-white">Issues & Projects</h4>
+                            <p class="text-gh-muted leading-relaxed text-sm">
+                                Kövesd nyomon a hibákat (bugs), az új funkciók iránti igényeket (feature requests) vagy a feladatokat. A GitHub Kanban-táblákat és projektmenedzsment eszközöket is biztosít.
+                            </p>
+                        </div>
+                        <div class="bg-gh-bg p-6 rounded-xl border border-gh-border space-y-3">
+                            <div class="flex items-center justify-between bg-gh-card p-3 rounded-lg border border-gh-border">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-3 h-3 rounded-full bg-gh-green"></span>
+                                    <span class="text-sm font-semibold text-gh-white">#102 Sötét mód hibás Safari-ban</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-xs bg-red-500/20 text-red-400 border border-red-500/30">bug</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-gh-card p-3 rounded-lg border border-gh-border">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-3 h-3 rounded-full bg-gh-green"></span>
+                                    <span class="text-sm font-semibold text-gh-white">#105 Google OAuth bejelentkezés</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">enhancement</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 4: Actions -->
+                    <div id="content-actions" class="tab-content hidden w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4">
+                            <span class="px-3 py-1 rounded-md text-xs font-mono bg-gh-blue/10 text-gh-blue border border-gh-blue/20">CI/CD Automatizáció</span>
+                            <h4 class="text-2xl font-bold text-gh-white">GitHub Actions</h4>
+                            <p class="text-gh-muted leading-relaxed text-sm">
+                                Automatizáld a szoftverfejlesztési folyamatokat! Teszteld a kódot minden commit után, fordítsd le a projektet és publikáld éles szerverre teljesen automatikusan.
+                            </p>
+                        </div>
+                        <div class="bg-gh-bg p-6 rounded-xl border border-gh-border font-mono text-xs space-y-2">
+                            <div class="flex items-center space-x-2 text-gh-green">
+                                <span>✓ Build & Test Workflow</span>
+                                <span class="text-gh-muted">(passed in 42s)</span>
+                            </div>
+                            <div class="pl-4 space-y-1 text-gh-muted border-l border-gh-border">
+                                <div>✓ Setup Node.js v20</div>
+                                <div>✓ Install Dependencies</div>
+                                <div>✓ Run Unit Tests (142 passed)</div>
+                                <div>✓ Deploy to Production</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 5: Copilot -->
+                    <div id="content-copilot" class="tab-content hidden w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4">
+                            <span class="px-3 py-1 rounded-md text-xs font-mono bg-gh-purple/10 text-gh-purple border border-gh-purple/20">Mesterséges Intelligencia</span>
+                            <h4 class="text-2xl font-bold text-gh-white">GitHub Copilot</h4>
+                            <p class="text-gh-muted leading-relaxed text-sm">
+                                A te AI pár-programozód! Valós időben egészíti ki a kódodat, funkciókat generál kommentek alapján, megmagyarázza a komplex kódokat és segít a hibakeresésben.
+                            </p>
+                        </div>
+                        <div class="bg-gh-bg p-6 rounded-xl border border-gh-border font-mono text-xs space-y-2">
+                            <div class="text-gh-muted">// Függvény, ami kiszámolja a faktoriálist</div>
+                            <div class="text-gh-blue">function calculateFactorial(n) {</div>
+                            <div class="pl-4 text-gh-purple/90 bg-gh-purple/10 p-2 rounded border border-gh-purple/20">
+                                // Copilot által kiegészített kód:<br>
+                                if (n === 0 || n === 1) return 1;<br>
+                                return n * calculateFactorial(n - 1);
+                            </div>
+                            <div class="text-gh-blue">}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Verziókezelés & Git Alapok (Interactive Step-by-Step Workflow) -->
+        <section id="workflow" class="py-20 border-b border-gh-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-semibold text-gh-blue uppercase tracking-widest mb-2">Lépésről Lépésre</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-gh-white">Az Alapvető Git & GitHub Munkafolyamat</h3>
+                    <p class="mt-4 text-gh-muted text-base">Így kerül a helyi számítógépeden írt kód a GitHub felhőjébe 4 egyszerű lépésben.</p>
+                </div>
+
+                <!-- 4 Steps Interactive Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Step 1 -->
+                    <div class="bg-gh-card border border-gh-border p-6 rounded-2xl relative group hover:border-gh-blue transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-gh-blue/20 text-gh-blue flex items-center justify-center font-bold font-mono text-lg mb-4">1</div>
+                        <h4 class="text-xl font-bold text-gh-white mb-2">git init</h4>
+                        <p class="text-sm text-gh-muted mb-4">Munkamenet / projekt inicializálása a helyi mappában. A Git megkezdi a fájlok követését.</p>
+                        <div class="bg-gh-bg p-3 rounded-lg border border-gh-border font-mono text-xs text-gh-blue">
+                            $ git init
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-gh-card border border-gh-border p-6 rounded-2xl relative group hover:border-gh-green transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-gh-green/20 text-gh-green flex items-center justify-center font-bold font-mono text-lg mb-4">2</div>
+                        <h4 class="text-xl font-bold text-gh-white mb-2">git add</h4>
+                        <p class="text-sm text-gh-muted mb-4">Módosítások előkészítése a mentésre (Staging Area). Meghatározod, mi kerüljön bele a commitba.</p>
+                        <div class="bg-gh-bg p-3 rounded-lg border border-gh-border font-mono text-xs text-gh-green">
+                            $ git add .
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-gh-card border border-gh-border p-6 rounded-2xl relative group hover:border-gh-purple transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-gh-purple/20 text-gh-purple flex items-center justify-center font-bold font-mono text-lg mb-4">3</div>
+                        <h4 class="text-xl font-bold text-gh-white mb-2">git commit</h4>
+                        <p class="text-sm text-gh-muted mb-4">Pillanatkép (snapshot) készítése a kód állapotáról egy leíró üzenettel ellátva.</p>
+                        <div class="bg-gh-bg p-3 rounded-lg border border-gh-border font-mono text-xs text-gh-purple">
+                            $ git commit -m "üzenet"
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="bg-gh-card border border-gh-border p-6 rounded-2xl relative group hover:border-gh-pink transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-gh-pink/20 text-gh-pink flex items-center justify-center font-bold font-mono text-lg mb-4">4</div>
+                        <h4 class="text-xl font-bold text-gh-white mb-2">git push</h4>
+                        <p class="text-sm text-gh-muted mb-4">A helyi commitok feltöltése a távoli (Remote) GitHub szerverre, hogy mások is elérhessék.</p>
+                        <div class="bg-gh-bg p-3 rounded-lg border border-gh-border font-mono text-xs text-gh-pink">
+                            $ git push origin main
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Hasznos Git & GitHub Parancsok (Filterable Cheat Sheet with Copy) -->
+        <section id="parancsok" class="py-20 border-b border-gh-border bg-[#0d1117]/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                    <div>
+                        <h2 class="text-xs font-semibold text-gh-purple uppercase tracking-widest mb-2">Tudásbázis</h2>
+                        <h3 class="text-3xl sm:text-4xl font-bold text-gh-white">Hasznos Parancsgyűjtemény</h3>
+                        <p class="mt-2 text-gh-muted text-sm">Gyakori Git és GitHub CLI parancsok egy kattintásos másolással.</p>
+                    </div>
+
+                    <!-- Search / Filter Input -->
+                    <div class="mt-6 md:mt-0 w-full md:w-80">
+                        <div class="relative">
+                            <input type="text" id="command-search" onkeyup="filterCommands()" placeholder="Keresés parancsra pl. 'branch'..." class="w-full bg-gh-card border border-gh-border rounded-xl px-4 py-2.5 pl-10 text-sm text-gh-white focus:outline-none focus:border-gh-purple transition-all">
+                            <svg class="w-4 h-4 text-gh-muted absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commands Grid -->
+                <div id="commands-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    
+                    <!-- Command item -->
+                    <div class="cmd-card bg-gh-card border border-gh-border p-4 rounded-xl flex flex-col justify-between space-y-3 hover:border-gh-border/80 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-gh-muted mb-1">
+                                <span class="font-mono text-gh-blue">Kezdés & Klónozás</span>
+                            </div>
+                            <p class="text-sm font-medium text-gh-white mb-2">Projekt letöltése GitHubról</p>
+                            <code class="block font-mono text-xs bg-gh-bg p-2.5 rounded-lg border border-gh-border text-gh-green overflow-x-auto">git clone https://github.com/user/repo.git</code>
+                        </div>
+                        <button onclick="copyToClipboard('git clone https://github.com/user/repo.git')" class="self-end px-3 py-1 rounded-md text-xs bg-gh-border/50 hover:bg-gh-border text-gh-text hover:text-gh-white transition-all flex items-center space-x-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <span>Másolás</span>
+                        </button>
+                    </div>
+
+                    <!-- Command item -->
+                    <div class="cmd-card bg-gh-card border border-gh-border p-4 rounded-xl flex flex-col justify-between space-y-3 hover:border-gh-border/80 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-gh-muted mb-1">
+                                <span class="font-mono text-gh-purple">Branch kezelés</span>
+                            </div>
+                            <p class="text-sm font-medium text-gh-white mb-2">Új ág létrehozása és átváltás</p>
+                            <code class="block font-mono text-xs bg-gh-bg p-2.5 rounded-lg border border-gh-border text-gh-purple overflow-x-auto">git checkout -b feature-uj-funkcio</code>
+                        </div>
+                        <button onclick="copyToClipboard('git checkout -b feature-uj-funkcio')" class="self-end px-3 py-1 rounded-md text-xs bg-gh-border/50 hover:bg-gh-border text-gh-text hover:text-gh-white transition-all flex items-center space-x-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <span>Másolás</span>
+                        </button>
+                    </div>
+
+                    <!-- Command item -->
+                    <div class="cmd-card bg-gh-card border border-gh-border p-4 rounded-xl flex flex-col justify-between space-y-3 hover:border-gh-border/80 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-gh-muted mb-1">
+                                <span class="font-mono text-gh-orange">Frissítés</span>
+                            </div>
+                            <p class="text-sm font-medium text-gh-white mb-2">Friss kód letöltése GitHubról</p>
+                            <code class="block font-mono text-xs bg-gh-bg p-2.5 rounded-lg border border-gh-border text-gh-orange overflow-x-auto">git pull origin main</code>
+                        </div>
+                        <button onclick="copyToClipboard('git pull origin main')" class="self-end px-3 py-1 rounded-md text-xs bg-gh-border/50 hover:bg-gh-border text-gh-text hover:text-gh-white transition-all flex items-center space-x-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <span>Másolás</span>
+                        </button>
+                    </div>
+
+                    <!-- Command item -->
+                    <div class="cmd-card bg-gh-card border border-gh-border p-4 rounded-xl flex flex-col justify-between space-y-3 hover:border-gh-border/80 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-gh-muted mb-1">
+                                <span class="font-mono text-gh-blue">Információ</span>
+                            </div>
+                            <p class="text-sm font-medium text-gh-white mb-2">Előzmények megtekintése</p>
+                            <code class="block font-mono text-xs bg-gh-bg p-2.5 rounded-lg border border-gh-border text-gh-blue overflow-x-auto">git log --oneline --graph</code>
+                        </div>
+                        <button onclick="copyToClipboard('git log --oneline --graph')" class="self-end px-3 py-1 rounded-md text-xs bg-gh-border/50 hover:bg-gh-border text-gh-text hover:text-gh-white transition-all flex items-center space-x-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <span>Másolás</span>
+                        </button>
+                    </div>
+
+                    <!-- Command item -->
+                    <div class="cmd-card bg-gh-card border border-gh-border p-4 rounded-xl flex flex-col justify-between space-y-3 hover:border-gh-border/80 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-gh-muted mb-1">
+                                <span class="font-mono text-red-400">Visszavonás</span>
+                            </div>
+                            <p class="text-sm font-medium text-gh-white mb-2">Unstaged fájl visszaállítása</p>
+                            <code class="block font-mono text-xs bg-gh-bg p-2.5 rounded-lg border border-gh-border text-red-400 overflow-x-auto">git restore app.js</code>
+                        </div>
+                        <button onclick="copyToClipboard('git restore app.js')" class="self-end px-3 py-1 rounded-md text-xs bg-gh-border/50 hover:bg-gh-border text-gh-text hover:text-gh-white transition-all flex items-center space-x-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <span>Másolás</span>
+                        </button>
+                    </div>
+
+                    <!-- Command item -->
+                    <div class="cmd-card bg-gh-card border border-gh-border p-4 rounded-xl flex flex-col justify-between space-y-3 hover:border-gh-border/80 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-gh-muted mb-1">
+                                <span class="font-mono text-gh-pink">GitHub CLI</span>
+                            </div>
+                            <p class="text-sm font-medium text-gh-white mb-2">Pull Request létrehozása terminálból</p>
+                            <code class="block font-mono text-xs bg-gh-bg p-2.5 rounded-lg border border-gh-border text-gh-pink overflow-x-auto">gh pr create --title "Új funkció"</code>
+                        </div>
+                        <button onclick="copyToClipboard('gh pr create --title &quot;Új funkció&quot;')" class="self-end px-3 py-1 rounded-md text-xs bg-gh-border/50 hover:bg-gh-border text-gh-text hover:text-gh-white transition-all flex items-center space-x-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <span>Másolás</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Kinek és Miért? (Use Cases) -->
+        <section id="kinek-ajanlott" class="py-20 border-b border-gh-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-semibold text-gh-green uppercase tracking-widest mb-2">Célcsoportok</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-gh-white">Kinek és Miért Ajánlott a GitHub?</h3>
+                    <p class="mt-4 text-gh-muted text-base">A GitHub nemcsak profi programozóknak szól, hanem diákoktól a világ legnagyobb vállalataiig mindenkinek értéket nyújt.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Target 1: Students -->
+                    <div class="bg-gh-card border border-gh-border p-6 rounded-2xl flex flex-col justify-between hover:border-gh-blue/50 transition-all">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-gh-blue/10 border border-gh-blue/20 text-gh-blue flex items-center justify-center text-2xl mb-4">
+                                🎓
+                            </div>
+                            <h4 class="text-xl font-bold text-gh-white mb-2">Diákok & Tanulók</h4>
+                            <p class="text-sm text-gh-muted leading-relaxed">
+                                A GitHub Student Developer Pack révén ingyenes hozzáférést kapsz prémium fejlesztői eszközökhöz, Copilothoz és domainekhez. Portfóliót építhetsz az álláskereséshez.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Target 2: Developers -->
+                    <div class="bg-gh-card border border-gh-border p-6 rounded-2xl flex flex-col justify-between hover:border-gh-green/50 transition-all">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-gh-green/10 border border-gh-green/20 text-gh-green flex items-center justify-center text-2xl mb-4">
+                                💻
+                            </div>
+                            <h4 class="text-xl font-bold text-gh-white mb-2">Szoftverfejlesztők</h4>
+                            <p class="text-sm text-gh-muted leading-relaxed">
+                                Személyes projektek tárolása, folyamatos verziókövetés, automatikus tesztelés és az iparági sztenderdek elsajátítása egy helyen.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Target 3: Companies -->
+                    <div class="bg-gh-card border border-gh-border p-6 rounded-2xl flex flex-col justify-between hover:border-gh-purple/50 transition-all">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-gh-purple/10 border border-gh-purple/20 text-gh-purple flex items-center justify-center text-2xl mb-4">
+                                🏢
+                            </div>
+                            <h4 class="text-xl font-bold text-gh-white mb-2">Vállalatok & Cégek</h4>
+                            <p class="text-sm text-gh-muted leading-relaxed">
+                                GitHub Enterprise: biztonságos kódtárolás, szigorú hozzáférés-kezelés, SOC2 megfelelőség, és zökkenőmentes csatlakozás a meglévő CI/CD rendszerekhez.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Target 4: Open Source -->
+                    <div class="bg-gh-card border border-gh-border p-6 rounded-2xl flex flex-col justify-between hover:border-gh-orange/50 transition-all">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-gh-orange/10 border border-gh-orange/20 text-gh-orange flex items-center justify-center text-2xl mb-4">
+                                🌐
+                            </div>
+                            <h4 class="text-xl font-bold text-gh-white mb-2">Open-Source Közösségek</h4>
+                            <p class="text-sm text-gh-muted leading-relaxed">
+                                Hozzájárulás világhírű projektekhez (React, Linux, Python). Szerezz elismertséget a globális fejlesztői közösségben!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Interactive Section: Terminal Simulator & Quiz -->
+        <section id="interaktiv" class="py-20 border-b border-gh-border bg-[#0d1117]/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-semibold text-gh-purple uppercase tracking-widest mb-2">Interaktív Gyakorlás</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-gh-white">Teszteld a Tudásodat!</h3>
+                    <p class="mt-4 text-gh-muted text-base">Próbáld ki az interaktív mini terminált vagy töltsd ki a gyors GitHub kvízt!</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Mini Terminal Simulator -->
+                    <div class="bg-gh-card border border-gh-border rounded-2xl overflow-hidden flex flex-col">
+                        <div class="bg-[#161b22] px-4 py-3 border-b border-gh-border flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <span class="text-xs font-mono text-gh-muted">Mini Git Szimulátor</span>
+                            <button onclick="clearSimTerminal()" class="text-xs text-gh-muted hover:text-gh-white">Törlés</button>
+                        </div>
+                        
+                        <!-- Terminal Log Area -->
+                        <div id="sim-terminal-body" class="p-4 font-mono text-xs sm:text-sm h-64 overflow-y-auto space-y-2 bg-[#0d1117] text-gh-text flex-grow">
+                            <div class="text-gh-muted">Üdvözöl a Mini Git Szimulátorban! 👋</div>
+                            <div class="text-gh-muted">Próbáld ki a következő parancsokat: <span class="text-gh-blue">git status</span>, <span class="text-gh-green">git add .</span>, <span class="text-gh-purple">git commit -m "üzenet"</span>, <span class="text-gh-pink">git push</span></div>
+                        </div>
+
+                        <!-- Terminal Input -->
+                        <div class="p-3 bg-[#161b22] border-t border-gh-border flex items-center space-x-2">
+                            <span class="text-gh-purple font-mono text-sm">➜</span>
+                            <input type="text" id="sim-input" onkeydown="handleSimInput(event)" placeholder="Írj be egy Git parancsot és nyomj Entert..." class="w-full bg-transparent font-mono text-sm text-gh-white focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Mini Knowledge Quiz -->
+                    <div class="bg-gh-card border border-gh-border rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-mono text-gh-purple uppercase font-bold">GitHub Kvíz</span>
+                                <span id="quiz-score" class="text-xs font-mono text-gh-muted">Pontszám: 0</span>
+                            </div>
+
+                            <div id="quiz-container">
+                                <h4 id="quiz-question" class="text-lg font-bold text-gh-white mb-6">
+                                    Melyik parancs szolgál a módosítások előkészítésére (staging) commit előtt?
+                                </h4>
+
+                                <div id="quiz-options" class="space-y-3">
+                                    <!-- Dynamic Options inserted via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="quiz-footer" class="mt-6 pt-4 border-t border-gh-border flex justify-between items-center">
+                            <span id="quiz-feedback" class="text-xs font-medium"></span>
+                            <button id="next-question-btn" onclick="nextQuestion()" class="hidden px-4 py-2 rounded-lg bg-gh-purple text-white text-xs font-semibold hover:bg-opacity-90 transition-all">
+                                Következő kérdés ➔
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 9. Footer -->
+    <footer class="bg-gh-bg border-t border-gh-border py-12 text-sm text-gh-muted">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                
+                <!-- Brand Info -->
+                <div class="space-y-3 md:col-span-1">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-6 h-6 text-gh-white fill-current" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                        <span class="font-bold text-gh-white">GitHub Bemutató</span>
+                    </div>
+                    <p class="text-xs leading-relaxed">
+                        Informatív bemutató oldal a GitHub funkcióiról, a Git verziókezelés alapjairól és a fejlesztői munkafolyamatokról.
+                    </p>
+                </div>
+
+                <!-- Column 2: Nav Links -->
+                <div>
+                    <h5 class="font-semibold text-gh-white mb-3 text-xs uppercase tracking-wider">Navigáció</h5>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#mi-az-a-github" class="hover:text-gh-white transition-colors">Mi az a GitHub?</a></li>
+                        <li><a href="#funkciok" class="hover:text-gh-white transition-colors">Fő funkciók</a></li>
+                        <li><a href="#workflow" class="hover:text-gh-white transition-colors">Git Munkafolyamat</a></li>
+                        <li><a href="#parancsok" class="hover:text-gh-white transition-colors">Parancsok</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Resources -->
+                <div>
+                    <h5 class="font-semibold text-gh-white mb-3 text-xs uppercase tracking-wider">Hivatalos Hivatkozások</h5>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="https://github.com" target="_blank" class="hover:text-gh-white transition-colors">GitHub.com</a></li>
+                        <li><a href="https://docs.github.com" target="_blank" class="hover:text-gh-white transition-colors">GitHub Dokumentáció</a></li>
+                        <li><a href="https://git-scm.com" target="_blank" class="hover:text-gh-white transition-colors">Git Hivatalos Oldala</a></li>
+                        <li><a href="https://education.github.com" target="_blank" class="hover:text-gh-white transition-colors">GitHub Education</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Tech Stack Info -->
+                <div>
+                    <h5 class="font-semibold text-gh-white mb-3 text-xs uppercase tracking-wider">Eszközök</h5>
+                    <p class="text-xs leading-relaxed mb-3">
+                        Készült Tailwind CSS és interaktív JavaScript segítségével a GitHub sötét témájának stílusában.
+                    </p>
+                    <span class="inline-block px-2.5 py-1 rounded bg-gh-card border border-gh-border text-[11px] text-gh-green font-mono">
+                        v2.4 • Hungarian Edition
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-gh-border flex flex-col sm:flex-row items-center justify-between text-xs text-gh-muted">
+                <p>&copy; 2026 GitHub Bemutató Interaktív Weboldal.</p>
+                <div class="mt-4 sm:mt-0 flex space-x-6">
+                    <a href="https://github.com/privacy" target="_blank" class="hover:text-gh-white">Adatvédelem</a>
+                    <a href="https://github.com/terms" target="_blank" class="hover:text-gh-white">Feltételek</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript Logic -->
+    <script>
+        // 1. Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // 2. Feature Tabs Switcher
+        function switchTab(tabId) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            // Show target content
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+
+            // Reset tab button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn px-5 py-2.5 rounded-xl text-sm font-medium border border-gh-border bg-gh-card text-gh-muted hover:text-gh-white transition-all';
+            });
+
+            // Highlight active button
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.className = 'tab-btn px-5 py-2.5 rounded-xl text-sm font-medium border border-gh-purple bg-gh-purple/10 text-gh-purple transition-all shadow-sm';
+        }
+
+        // 3. Toast Notification & Copy to Clipboard
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = message;
+            
+            toast.classList.remove('opacity-0', 'translate-y-5', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-5', 'pointer-events-none');
+            }, 2500);
+        }
+
+        function copyToClipboard(text) {
+            // Fallback for document.execCommand as per rules
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast(`Parancs másolva: "${text.substring(0, 25)}..."`);
+            } catch (err) {
+                showToast("Hiba a másolás során!");
+            }
+            
+            document.body.removeChild(textarea);
+        }
+
+        // 4. Command Search Filter
+        function filterCommands() {
+            const input = document.getElementById('command-search').value.toLowerCase();
+            const cards = document.querySelectorAll('.cmd-card');
+
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(input)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // 5. Terminal Simulator State & Logic
+        let simState = {
+            initialized: false,
+            staged: false,
+            committed: false,
+        };
+
+        function handleSimInput(event) {
+            if (event.key === 'Enter') {
+                const input = event.target;
+                const cmd = input.value.trim();
+                if (!cmd) return;
+
+                const terminalBody = document.getElementById('sim-terminal-body');
+
+                // Append user command
+                const userLine = document.createElement('div');
+                userLine.innerHTML = `<span class="text-gh-purple">➜</span> <span class="text-gh-white">${escapeHtml(cmd)}</span>`;
+                terminalBody.appendChild(userLine);
+
+                // Process command
+                const responseLine = document.createElement('div');
+                responseLine.className = 'pl-3 border-l-2 my-1 text-xs';
+
+                const lowerCmd = cmd.toLowerCase();
+
+                if (lowerCmd === 'git init') {
+                    simState.initialized = true;
+                    responseLine.className += ' border-gh-blue text-gh-blue';
+                    responseLine.innerText = 'Initialized empty Git repository in /project/.git/';
+                } else if (lowerCmd === 'git status') {
+                    responseLine.className += ' border-gh-muted text-gh-muted';
+                    if (!simState.initialized) {
+                        responseLine.innerText = 'fatal: not a git repository (use "git init" first)';
+                    } else if (simState.committed) {
+                        responseLine.innerText = 'On branch main\nNothing to commit, working tree clean';
+                    } else if (simState.staged) {
+                        responseLine.innerText = 'On branch main\nChanges to be committed:\n  (use "git restore --staged <file>..." to unstage)\n\tnew file: index.html';
+                    } else {
+                        responseLine.innerText = 'On branch main\nUntracked files:\n  (use "git add <file>..." to include in what will be committed)\n\tindex.html';
+                    }
+                } else if (lowerCmd.startsWith('git add')) {
+                    responseLine.className += ' border-gh-green text-gh-green';
+                    if (!simState.initialized) {
+                        responseLine.innerText = 'fatal: not a git repository (use "git init" first)';
+                    } else {
+                        simState.staged = true;
+                        responseLine.innerText = 'Fájlok sikeresen előkészítve (staged)!';
+                    }
+                } else if (lowerCmd.startsWith('git commit')) {
+                    responseLine.className += ' border-gh-purple text-gh-purple';
+                    if (!simState.staged) {
+                        responseLine.innerText = 'error: no changes added to commit (use "git add")';
+                    } else {
+                        simState.committed = true;
+                        responseLine.innerText = '[main 4a12b8f] Módosítások elmentve helyileg!';
+                    }
+                } else if (lowerCmd.startsWith('git push')) {
+                    responseLine.className += ' border-gh-pink text-gh-pink';
+                    if (!simState.committed) {
+                        responseLine.innerText = 'Everything up-to-date (nincs új commit a feltöltéshez)';
+                    } else {
+                        responseLine.innerText = 'Enumerating objects: 3, done.\nTo github.com:user/repo.git\n * [new branch] main -> main\nSikeres feltöltés a GitHubra! 🎉';
+                    }
+                } else if (lowerCmd === 'clear') {
+                    clearSimTerminal();
+                    input.value = '';
+                    return;
+                } else {
+                    responseLine.className += ' border-red-500 text-red-400';
+                    responseLine.innerText = `bash: command not found: ${cmd}. Próbáld ki: git init, git status, git add ., git commit -m "üzenet", git push`;
+                }
+
+                terminalBody.appendChild(responseLine);
+                input.value = '';
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            }
+        }
+
+        function clearSimTerminal() {
+            const terminalBody = document.getElementById('sim-terminal-body');
+            terminalBody.innerHTML = '<div class="text-gh-muted">Terminál törölve. Írj be egy parancsot...</div>';
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // 6. Mini Quiz Data & Logic
+        const quizData = [
+            {
+                question: "Melyik parancs szolgál a módosítások előkészítésére (staging) commit előtt?",
+                options: ["git push", "git add .", "git init", "git checkout"],
+                correct: 1
+            },
+            {
+                question: "Mi a különbség a Git és a GitHub között?",
+                options: [
+                    "A Git egy helyi szoftver, a GitHub egy felhőalapú platform.",
+                    "Ugyanaz a kettő, nincs semmi különbség.",
+                    "A GitHub egy programozási nyelv, a Git egy adatbázis.",
+                    "A Git csak Mac-en fut, a GitHub Windows-on."
+                ],
+                correct: 0
+            },
+            {
+                question: "Melyik GitHub funkció teszi lehetővé a kód felülvizsgálatát és egyesítését?",
+                options: ["GitHub Actions", "Issues", "Pull Request (PR)", "GitHub Pages"],
+                correct: 2
+            },
+            {
+                question: "Melyik parancs tölti le a GitHubról a mások által feltöltött legfrissebb módosításokat?",
+                options: ["git pull", "git commit", "git restore", "git status"],
+                correct: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            document.getElementById('quiz-question').innerText = `${currentQuestion + 1}. ${q.question}`;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            document.getElementById('quiz-feedback').innerText = '';
+            document.getElementById('next-question-btn').classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3.5 rounded-xl border border-gh-border bg-gh-bg text-gh-text text-sm font-medium hover:border-gh-purple/60 hover:bg-gh-card transition-all flex items-center justify-between';
+                btn.innerHTML = `<span>${opt}</span> <span class="text-xs font-mono text-gh-muted">#${idx + 1}</span>`;
+                btn.onclick = () => selectAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(index) {
+            const q = quizData[currentQuestion];
+            const options = document.getElementById('quiz-options').children;
+
+            // Disable all option buttons after answer selection
+            for (let i = 0; i < options.length; i++) {
+                options[i].onclick = null;
+                options[i].classList.add('opacity-60', 'cursor-not-allowed');
+            }
+
+            const feedback = document.getElementById('quiz-feedback');
+
+            if (index === q.correct) {
+                score += 10;
+                document.getElementById('quiz-score').innerText = `Pontszám: ${score}`;
+                options[index].classList.remove('opacity-60', 'border-gh-border', 'bg-gh-bg');
+                options[index].classList.add('border-gh-green', 'bg-gh-green/10', 'text-gh-green');
+                feedback.innerText = "✅ Helyes válasz!";
+                feedback.className = "text-xs font-medium text-gh-green";
+            } else {
+                options[index].classList.remove('opacity-60', 'border-gh-border', 'bg-gh-bg');
+                options[index].classList.add('border-red-500', 'bg-red-500/10', 'text-red-400');
+                
+                options[q.correct].classList.remove('opacity-60');
+                options[q.correct].classList.add('border-gh-green', 'text-gh-green');
+
+                feedback.innerText = "❌ Helytelen válasz!";
+                feedback.className = "text-xs font-medium text-red-400";
+            }
+
+            const nextBtn = document.getElementById('next-question-btn');
+            if (currentQuestion < quizData.length - 1) {
+                nextBtn.innerText = "Következő kérdés ➔";
+                nextBtn.classList.remove('hidden');
+            } else {
+                nextBtn.innerText = "Kvíz Újraindítása 🔄";
+                nextBtn.classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                // Restart quiz
+                currentQuestion = 0;
+                score = 0;
+                document.getElementById('quiz-score').innerText = `Pontszám: 0`;
+                loadQuestion();
+            }
+        }
+
+        // Initialize quiz on load
+        window.onload = function() {
+            loadQuestion();
+        };
+    </script>
+</body>
+</html>
